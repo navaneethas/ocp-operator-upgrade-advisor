@@ -22,14 +22,15 @@ Before upgrading your OpenShift cluster, this tool tells you:
 
 ---
 
-## 🌐 Try It Now
+## 🖥️ Quick Start
 
-### Live Demo
-**Web UI:** https://navaneethas.github.io/ocp-operator-upgrade-advisor/
+**1. Download the CLI tool:**
+```bash
+curl -O https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/cli-analyzer-enhanced.py
+curl -O https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
+```
 
-### Quick Start
-
-**1. Collect your cluster data:**
+**2. Collect your cluster data:**
 ```bash
 (echo '{"clusterVersion":'; oc get clusterversion version -o json; \
  echo ',"subscriptions":'; oc get sub -A -o json; \
@@ -37,54 +38,39 @@ Before upgrading your OpenShift cluster, this tool tells you:
  echo '}') > cluster-data.json
 ```
 
-**2. Upload & analyze:**
-- Open the web UI
-- Upload `cluster-data.json`
-- Select target OCP version
-- Click "Analyze Compatibility"
+**3. Run analysis:**
+```bash
+python3 cli-analyzer-enhanced.py cluster-data.json 4.22 compatibility_matrix.json
+```
 
-**3. Review results!**
+**4. Review results!**
 
 ---
 
-## 🖥️ CLI Version
+## 🔧 Using in Supportshell (Geminicli)
 
-For those who prefer command-line:
+For Red Hat support engineers working in supportshell:
 
+**1. Download the skill and matrix:**
 ```bash
-# Download
-curl -O https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/cli-analyzer-enhanced.py
+curl -o ocp-operator-compatibility.md \
+  https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/ocp-operator-compatibility.md
 
-# Run
-python3 cli-analyzer-enhanced.py cluster-data.json --target-ocp 4.22
+curl -o compatibility_matrix.json \
+  https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
 ```
 
----
-
-## 🐳 Self-Host (Optional)
-
-Want to run it on your own infrastructure?
-
-### Docker
+**2. Navigate to must-gather:**
 ```bash
-docker run -d -p 8000:8000 ghcr.io/yourusername/ocp-upgrade-advisor:latest
+cd /path/to/must-gather
 ```
 
-### Docker Compose
+**3. Use with geminicli:**
 ```bash
-git clone https://github.com/navaneethas/ocp-operator-upgrade-advisor.git
-cd openshift-upgrade-advisor
-docker-compose up -d
+geminicli check operator compatibility for OCP 4.20
 ```
 
-### Manual
-```bash
-git clone https://github.com/navaneethas/ocp-operator-upgrade-advisor.git
-cd openshift-upgrade-advisor/backend
-python3 simple_server_enhanced.py
-```
-
-Access at: http://localhost:8000
+**Full guide:** [SUPPORTSHELL-SHARING-GUIDE.md](SUPPORTSHELL-SHARING-GUIDE.md)
 
 ---
 
@@ -92,7 +78,8 @@ Access at: http://localhost:8000
 
 - ✅ **180 Red Hat Operators** - Complete coverage
 - ✅ **OCP 4.12 - 4.22** - All recent versions
-- ✅ **Web GUI + CLI** - Use what you prefer
+- ✅ **CLI Tool** - Easy to use command-line interface
+- ✅ **Geminicli Integration** - Works in supportshell
 - ✅ **No External Dependencies** - Python stdlib only
 - ✅ **Color-Coded Results** - Easy to understand
 - ✅ **Version Recommendations** - Know what to upgrade to
@@ -102,87 +89,29 @@ Access at: http://localhost:8000
 
 ---
 
-## 📸 Screenshots
-
-### CLI Output
-```
-[1] ansible-automation-platform-operator
-  Current Version:    2.4.0+0.1785427615
-  Status:             ⚠ Incompatible Upgrade Required
-  Max Supported OCP:  4.20
-  Recommended:        2.7.0
-  Available in 4.22:  2.6.0, 2.7.0
-  
-  Explanation: ansible-automation-platform-operator v2.4.0+0.1785427615 
-  is only supported up to OCP 4.20. Target OCP 4.22 requires upgrade to v2.7.0.
-```
-
----
-
 ## 🎓 How It Works
 
 1. **Data Collection:** Gather cluster data using `oc` commands
 2. **Version Extraction:** Parse operator versions from CSVs
 3. **Compatibility Check:** Match against Red Hat operator catalogs (4.12-4.22)
 4. **Analysis:** Determine compatibility status and recommendations
-5. **Display:** Show results in web UI or CLI
+5. **Display:** Show results in CLI
 
 **Data Source:** Red Hat operator catalog indexes collected via `oc-mirror`
 
 ---
 
-## 🤝 Contributing
-
-Found a bug or have a suggestion? Please open an issue!
-
----
-
-## 🔒 Privacy & Security
-
-- ✅ **No data collection** - Your cluster data never leaves your environment
-- ✅ **No external API calls** - Fully self-contained
-- ✅ **Read-only** - Never modifies your cluster
-- ✅ **No authentication required** - Simple to use
-- ✅ **Open source** - Audit the code yourself
-
----
-
-## 📋 Supported Operators
-
-180 Red Hat operators including:
-- Advanced Cluster Management (ACM)
-- OpenShift GitOps (ArgoCD)
-- OpenShift Pipelines (Tekton)
-- Cluster Logging
-- Service Mesh (Istio)
-- Serverless (Knative)
-- Ansible Automation Platform
-- And 170+ more!
-
----
-
-## 📚 Documentation
-
-- [Deployment Guide](DEPLOYMENT-GUIDE.md) - How to deploy on your infrastructure
-- [Team README](TEAM-README.md) - User guide for your team
-- [GitHub Pages Setup](github-pages-setup.md) - Deploy to GitHub Pages
-
----
-
-## 🙏 Credits
-
-Created by [Your Name] with assistance from Claude (Anthropic)
-
----
-
-## 📜 License
-
-MIT License
-
----
-
 ## 💬 Feedback
 
-Give it a spin and let me know what you think!
+Have suggestions, found a bug, or want to share how you're using this tool? 
 
-**Built with ❤️ to make OpenShift upgrades easier**
+**Submit feedback:** [Open an issue on GitHub](https://github.com/navaneethas/ocp-operator-upgrade-advisor/issues/new)
+
+Let us know:
+- 🐛 Bug reports
+- 💡 Feature requests
+- 📝 Improvement suggestions
+- 🎉 Success stories
+- 📋 Missing operators or OCP versions
+
+Your feedback helps make this tool better for everyone!
