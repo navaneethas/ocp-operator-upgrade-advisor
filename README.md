@@ -45,13 +45,11 @@ gemini check operator compatibility for OCP <OCP_version> /path/to/must-gather
 gemini check operator compatibility for OCP 4.22 /cases/12345678/must-gather.local.xxx
 ```
 
-**Full guide:** [SUPPORTSHELL-SHARING-GUIDE.md](SUPPORTSHELL-SHARING-GUIDE.md)
-
 ---
 
 ## 🎓 How It Works
 
-1. **Data Collection:** Gather cluster data using `oc` commands
+1. **Data Collection:** Gather cluster data using `omc` commands
 2. **Version Extraction:** Parse operator versions from CSVs
 3. **Compatibility Check:** Match against Red Hat operator catalogs (4.12-4.22)
 4. **Analysis:** Determine compatibility status and recommendations
@@ -63,15 +61,6 @@ gemini check operator compatibility for OCP 4.22 /cases/12345678/must-gather.loc
 
 ## 💬 Feedback
 
-Have suggestions, found a bug, or want to share how you're using this tool? 
+Give it a spin and let me know what you think!
 
 **Submit feedback:** [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdPpmM164p9J7kSkFB9ph7V5dBgw4McyhwCjPwMJGCLYKYH9g/viewform?usp=publish-editor)
-
-Share:
-- 🐛 Bug reports
-- 💡 Feature requests
-- ❓ Questions
-- 🎉 Success stories
-- 📝 General suggestions
-
-**Your responses are private** - Only visible to the maintainer. Anonymous submissions welcome!
