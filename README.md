@@ -37,12 +37,12 @@ curl -o compatibility_matrix.json \
 
 **2. Use with geminicli:**
 ```bash
-gemini check operator compatibility for OCP <OCP_version> /path/to/must-gather
+gemini check operators compatibility for OCP <OCP_version> /path/to/must-gather
 ```
 
 **Example:**
 ```bash
-gemini check operator compatibility for OCP 4.22 /cases/12345678/must-gather.local.xxx
+gemini check operators compatibility for OCP 4.22 /cases/12345678/must-gather.local.xxx
 ```
 
 ---
