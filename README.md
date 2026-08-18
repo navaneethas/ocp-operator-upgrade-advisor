@@ -22,31 +22,6 @@ Before upgrading your OpenShift cluster, this tool tells you:
 
 ---
 
-## 🖥️ Quick Start
-
-**1. Download the CLI tool:**
-```bash
-curl -O https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/cli-analyzer-enhanced.py
-curl -O https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
-```
-
-**2. Collect your cluster data:**
-```bash
-(echo '{"clusterVersion":'; oc get clusterversion version -o json; \
- echo ',"subscriptions":'; oc get sub -A -o json; \
- echo ',"clusterServiceVersions":'; oc get csv -A -o json; \
- echo '}') > cluster-data.json
-```
-
-**3. Run analysis:**
-```bash
-python3 cli-analyzer-enhanced.py cluster-data.json 4.22 compatibility_matrix.json
-```
-
-**4. Review results!**
-
----
-
 ## 🔧 Using in Supportshell (Geminicli)
 
 For Red Hat support engineers working in supportshell:
@@ -60,32 +35,17 @@ curl -o compatibility_matrix.json \
   https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
 ```
 
-**2. Navigate to must-gather:**
+**2. Use with geminicli:**
 ```bash
-cd /path/to/must-gather
+gemini check operator compatibility for OCP <OCP_version> /path/to/must-gather
 ```
 
-**3. Use with geminicli:**
+**Example:**
 ```bash
-geminicli check operator compatibility for OCP 4.20
+gemini check operator compatibility for OCP 4.22 /cases/12345678/must-gather.local.xxx
 ```
 
 **Full guide:** [SUPPORTSHELL-SHARING-GUIDE.md](SUPPORTSHELL-SHARING-GUIDE.md)
-
----
-
-## ✨ Features
-
-- ✅ **180 Red Hat Operators** - Complete coverage
-- ✅ **OCP 4.12 - 4.22** - All recent versions
-- ✅ **CLI Tool** - Easy to use command-line interface
-- ✅ **Geminicli Integration** - Works in supportshell
-- ✅ **No External Dependencies** - Python stdlib only
-- ✅ **Color-Coded Results** - Easy to understand
-- ✅ **Version Recommendations** - Know what to upgrade to
-- ✅ **Build Metadata Handling** - Works with versions like `2.4.0+0.12345`
-- ✅ **Catalog Validation** - Detects non-Red Hat operators
-- ✅ **Offline Capable** - No internet required for analysis
 
 ---
 
