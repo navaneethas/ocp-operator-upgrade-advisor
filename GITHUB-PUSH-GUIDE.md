@@ -36,7 +36,7 @@ After creating the repository, GitHub will show you commands. Use these:
 cd /Users/nsenthil/AI_TOOL/openshift-upgrade-advisor
 
 # Add the remote (replace 'nsenthil' with your GitHub username if different)
-git remote add origin https://github.com/nsenthil/ocp-upgrade-advisor.git
+git remote add origin https://github.com/navaneethas/ocp-operator-upgrade-advisor.git
 
 # Push to GitHub
 git push -u origin main
@@ -50,7 +50,7 @@ git push -u origin main
 
 ### Step 3: Verify Upload
 
-1. Go to: https://github.com/nsenthil/ocp-upgrade-advisor
+1. Go to: https://github.com/navaneethas/ocp-operator-upgrade-advisor
 2. You should see:
    - ✅ README.md displayed
    - ✅ 11 files
@@ -65,7 +65,7 @@ git push -u origin main
 ### Enable Pages
 
 1. **Go to Settings:**
-   - https://github.com/nsenthil/ocp-upgrade-advisor/settings/pages
+   - https://github.com/navaneethas/ocp-operator-upgrade-advisor/settings/pages
 
 2. **Configure:**
    - Source: Deploy from a branch
@@ -76,7 +76,7 @@ git push -u origin main
 
 4. **Wait 2-3 minutes**, then visit:
    ```
-   https://nsenthil.github.io/ocp-upgrade-advisor/
+   https://navaneethas.github.io/ocp-operator-upgrade-advisor/
    ```
 
 Your web UI will be live! 🎉
@@ -94,7 +94,7 @@ After pushing, update the placeholder URLs:
 https://yourusername.github.io/openshift-upgrade-advisor/
 
 # Replace with:
-https://nsenthil.github.io/ocp-upgrade-advisor/
+https://navaneethas.github.io/ocp-operator-upgrade-advisor/
 ```
 
 ### 2. Update ocp-operator-compatibility.md (Line 69)
@@ -104,7 +104,7 @@ https://nsenthil.github.io/ocp-upgrade-advisor/
 https://raw.githubusercontent.com/yourusername/openshift-upgrade-advisor/main/compatibility_matrix.json
 
 # Replace with:
-https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/compatibility_matrix.json
+https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
 ```
 
 ### 3. Commit and Push Updates
@@ -127,8 +127,8 @@ Hi team,
 
 I built a tool to check operator compatibility before OpenShift upgrades.
 
-🌐 Web UI: https://nsenthil.github.io/ocp-upgrade-advisor/
-📚 GitHub: https://github.com/nsenthil/ocp-upgrade-advisor
+🌐 Web UI: https://navaneethas.github.io/ocp-operator-upgrade-advisor/
+📚 GitHub: https://github.com/navaneethas/ocp-operator-upgrade-advisor
 
 Usage:
 1. Collect cluster data: oc get clusterversion version -o json > cluster-data.json
@@ -153,14 +153,14 @@ Hi support team,
 New tool for checking operator compatibility in supportshell using geminicli!
 
 📋 Quick Setup:
-curl -o ocp-operator-compatibility.md https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/ocp-operator-compatibility.md
-curl -o compatibility_matrix.json https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/compatibility_matrix.json
+curl -o ocp-operator-compatibility.md https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/ocp-operator-compatibility.md
+curl -o compatibility_matrix.json https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
 
 📊 Usage:
 cd /path/to/must-gather
 geminicli check operator compatibility for OCP 4.20
 
-Full guide: https://github.com/nsenthil/ocp-upgrade-advisor/blob/main/SUPPORTSHELL-SHARING-GUIDE.md
+Full guide: https://github.com/navaneethas/ocp-operator-upgrade-advisor/blob/main/SUPPORTSHELL-SHARING-GUIDE.md
 
 No installations needed - just download 2 files and use geminicli!
 ```
@@ -172,10 +172,10 @@ No installations needed - just download 2 files and use geminicli!
 **For command-line users:**
 ```
 # Download CLI tool
-curl -O https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/cli-analyzer-enhanced.py
+curl -O https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/cli-analyzer-enhanced.py
 
 # Download compatibility data
-curl -O https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/compatibility_matrix.json
+curl -O https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
 
 # Collect cluster data
 (echo '{"clusterVersion":'; oc get clusterversion version -o json; \
@@ -214,7 +214,7 @@ git push
 - ✅ Documentation
 
 **Where colleagues can access:**
-- 🌐 Web: https://nsenthil.github.io/ocp-upgrade-advisor/
+- 🌐 Web: https://navaneethas.github.io/ocp-operator-upgrade-advisor/
 - 💻 CLI: Download from GitHub
 - 🔧 Supportshell: Geminicli skill
 
@@ -229,7 +229,7 @@ After pushing to GitHub:
 - [ ] Repository is public
 - [ ] README.md displays correctly on GitHub
 - [ ] GitHub Pages is enabled
-- [ ] Web UI loads at https://nsenthil.github.io/ocp-upgrade-advisor/
+- [ ] Web UI loads at https://navaneethas.github.io/ocp-operator-upgrade-advisor/
 - [ ] Updated all placeholder URLs in files
 - [ ] Tested downloading compatibility_matrix.json via raw URL
 - [ ] Tested downloading ocp-operator-compatibility.md

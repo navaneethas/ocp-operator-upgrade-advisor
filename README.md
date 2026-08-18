@@ -25,7 +25,7 @@ Before upgrading your OpenShift cluster, this tool tells you:
 ## 🌐 Try It Now
 
 ### Live Demo
-**Web UI:** https://yourusername.github.io/openshift-upgrade-advisor/
+**Web UI:** https://navaneethas.github.io/ocp-operator-upgrade-advisor/
 
 ### Quick Start
 
@@ -53,7 +53,7 @@ For those who prefer command-line:
 
 ```bash
 # Download
-curl -O https://raw.githubusercontent.com/yourusername/openshift-upgrade-advisor/main/cli-analyzer-enhanced.py
+curl -O https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/cli-analyzer-enhanced.py
 
 # Run
 python3 cli-analyzer-enhanced.py cluster-data.json --target-ocp 4.22
@@ -72,14 +72,14 @@ docker run -d -p 8000:8000 ghcr.io/yourusername/ocp-upgrade-advisor:latest
 
 ### Docker Compose
 ```bash
-git clone https://github.com/yourusername/openshift-upgrade-advisor.git
+git clone https://github.com/navaneethas/ocp-operator-upgrade-advisor.git
 cd openshift-upgrade-advisor
 docker-compose up -d
 ```
 
 ### Manual
 ```bash
-git clone https://github.com/yourusername/openshift-upgrade-advisor.git
+git clone https://github.com/navaneethas/ocp-operator-upgrade-advisor.git
 cd openshift-upgrade-advisor/backend
 python3 simple_server_enhanced.py
 ```

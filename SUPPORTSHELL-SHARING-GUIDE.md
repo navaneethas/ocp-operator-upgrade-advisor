@@ -19,13 +19,13 @@
 In supportshell, download the geminicli skill:
 
 ```bash
-curl -o ocp-operator-compatibility.md https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/ocp-operator-compatibility.md
+curl -o ocp-operator-compatibility.md https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/ocp-operator-compatibility.md
 ```
 
 ### Step 2: Download the Compatibility Matrix
 
 ```bash
-curl -o compatibility_matrix.json https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/compatibility_matrix.json
+curl -o compatibility_matrix.json https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
 ```
 
 **File size:** 103 KB (should download in <5 seconds)
@@ -133,7 +133,7 @@ If geminicli has issues, you can run the Python script directly:
 
 ### 1. Download the CLI Analyzer
 ```bash
-curl -o check-compatibility.py https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/cli-analyzer-enhanced.py
+curl -o check-compatibility.py https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/cli-analyzer-enhanced.py
 ```
 
 ### 2. Collect Data from Must-Gather
@@ -199,7 +199,7 @@ geminicli generate upgrade checklist for OCP 4.22
 ls -lh compatibility_matrix.json
 
 # If missing, download again
-curl -o compatibility_matrix.json https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/compatibility_matrix.json
+curl -o compatibility_matrix.json https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
 ```
 
 ### Issue: "No data found in must-gather"
@@ -230,7 +230,7 @@ geminicli --list-skills
 If you encounter issues:
 
 1. **Check GitHub for updates:**
-   - https://github.com/nsenthil/ocp-upgrade-advisor
+   - https://github.com/navaneethas/ocp-operator-upgrade-advisor
 
 2. **Contact the author:**
    - Created by: nsenthil@redhat.com
@@ -249,10 +249,10 @@ To get the latest version:
 
 ```bash
 # Download latest skill file
-curl -o ocp-operator-compatibility.md https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/ocp-operator-compatibility.md
+curl -o ocp-operator-compatibility.md https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/ocp-operator-compatibility.md
 
 # Download latest compatibility matrix (updated monthly)
-curl -o compatibility_matrix.json https://raw.githubusercontent.com/nsenthil/ocp-upgrade-advisor/main/compatibility_matrix.json
+curl -o compatibility_matrix.json https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
 ```
 
 ---
@@ -292,8 +292,8 @@ curl -o compatibility_matrix.json https://raw.githubusercontent.com/nsenthil/ocp
 
 ## 📚 Additional Resources
 
-- **Web UI:** https://nsenthil.github.io/ocp-upgrade-advisor/
-- **GitHub Repo:** https://github.com/nsenthil/ocp-upgrade-advisor
+- **Web UI:** https://navaneethas.github.io/ocp-operator-upgrade-advisor/
+- **GitHub Repo:** https://github.com/navaneethas/ocp-operator-upgrade-advisor
 - **Full Documentation:** See README.md in the repo
 
 ---

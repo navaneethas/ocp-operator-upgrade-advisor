@@ -66,7 +66,7 @@ class Colors:
     BOLD = '\033[1m'
 
 # Compatibility matrix - embedded for offline use
-COMPATIBILITY_MATRIX_URL = "https://raw.githubusercontent.com/yourusername/openshift-upgrade-advisor/main/compatibility_matrix.json"
+COMPATIBILITY_MATRIX_URL = "https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json"
 
 def normalize_version(version):
     """Remove build metadata from version string"""
@@ -298,12 +298,12 @@ if __name__ == "__main__":
 
 ### Step 1: Download compatibility matrix
 ```bash
-curl -o compatibility_matrix.json https://raw.githubusercontent.com/yourusername/openshift-upgrade-advisor/main/compatibility_matrix.json
+curl -o compatibility_matrix.json https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/compatibility_matrix.json
 ```
 
 ### Step 2: Download analyzer script
 ```bash
-curl -o check-operator-compatibility.py https://raw.githubusercontent.com/yourusername/openshift-upgrade-advisor/main/cli-analyzer-enhanced.py
+curl -o check-operator-compatibility.py https://raw.githubusercontent.com/navaneethas/ocp-operator-upgrade-advisor/main/cli-analyzer-enhanced.py
 ```
 
 ### Step 3: Collect data from must-gather
