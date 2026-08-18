@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>OpenShift Operator Upgrade Advisor</title>
+    <!-- Version: 4.0 - Removed Upgrade Path Features (PackageManifest not required) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ee0000 0%, #ff6b6b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 18px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .card h2 {
+            color: #1a1a2e;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .alert {
+            padding: 20px 24px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-color: #2196f3;
+            color: #0d47a1;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: #4caf50;
+            color: #1b5e20;
+        }
+
+        .alert > strong {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .alert p strong {
+            display: inline;
+            font-weight: 700;
+        }
+
+        .command-box {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-top: 15px;
+        }
+
+        .command-box code {
+            display: block;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .copy-btn:hover {
+            background: #3182ce;
+        }
+
+        .file-upload-zone {
+            border: 3px dashed #cbd5e0;
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload-zone:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.2);
+        }
+
+        .file-upload-zone.dragover {
+            border-color: #38ef7d;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            transform: scale(1.02);
+        }
+
+        .file-upload-zone input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .upload-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .file-name-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            border-radius: 12px;
+            font-weight: 600;
+            display: none;
+        }
+
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            background: white;
+            color: #2d3748;
+            margin: 25px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%234a5568' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            padding-right: 50px;
+        }
+
+        select:hover {
+            border-color: #667eea;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, #ee0000 0%, #ff4444 100%);
+            color: white;
+            border: none;
+            padding: 18px 36px;
+            font-size: 17px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(238, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(238, 0, 0, 0.4);
+        }
+
+        button:disabled {
+            background: linear-gradient(135deg, #cbd5e0, #a0aec0);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .results {
+            display: none;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .summary-card {
+            padding: 28px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .summary-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .summary-card h3 {
+            font-size: 48px;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .summary-card p {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-total {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .summary-compatible {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .summary-upgrade {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .summary-unsupported {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .operator-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .operator-table thead {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .operator-table th {
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .operator-table td {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 15px;
+        }
+
+        .operator-table tbody tr {
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .operator-table tbody tr:hover {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            transform: scale(1.01);
+        }
+
+        .status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-compatible {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+        }
+
+        .status-upgrade, .status-upgraderequired {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .status-incompatible {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: white;
+        }
+
+        .status-incompatible_upgrade_required, .status-incompatibleupgraderequired {
+            background: linear-gradient(135deg, #fd7e14, #ff6b35);
+            color: white;
+            border: 2px solid #dc3545;
+        }
+
+        .status-unsupported {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+
+        .status-notredhatoperator {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            border: 2px solid #0dcaf0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 25px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .risk-low {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+        }
+
+        .risk-medium {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .risk-high, .risk-critical {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: white;
+        }
+
+        .ai-summary-box {
+            margin: 30px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 20px;
+            border-left: 5px solid #2196f3;
+        }
+
+        .ai-summary-box strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #0d47a1;
+        }
+
+        .ai-summary-box p {
+            color: #1565c0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .operator-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .operator-card:hover {
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+        }
+
+        .operator-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .operator-name-section h4 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .operator-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .detail-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #667eea;
+        }
+
+        .detail-item label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .detail-item .value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* Removed upgrade-path-section styles - feature removed */
+            color: #2d3748;
+        }
+
+        .upgrade-arrow {
+            color: #667eea;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 OpenShift Operator Upgrade Advisor</h1>
+        </div>
+
+        <div class="card" id="uploadCard">
+            <h2 style="font-size: 28px; font-weight: 700;">
+                <span class="section-icon">📤</span>
+                Installed Operators Compatibility Checker
+            </h2>
+
+            <div class="alert alert-info">
+                <strong>📤 Upload Cluster Data</strong>
+                Run this single command on your OpenShift cluster to generate the complete data file:
+                <button class="copy-btn" onclick="copyCommand()">📋 Copy</button>
+                <div class="command-box">
+                    <code id="singleCommand">(echo '{"clusterVersion":'; oc get clusterversion version -o json; echo ',"subscriptions":'; oc get sub -A -o json; echo ',"clusterServiceVersions":'; oc get csv -A -o json; echo '}') > openshift-data.json</code>
+                </div>
+                <p style="margin-top: 15px; font-size: 14px; line-height: 1.5;">
+                    📁 This creates <strong style="display: inline;">openshift-data.json</strong> with all required information
+                </p>
+            </div>
+
+            <div class="file-upload-zone" id="uploadZone">
+                <div class="upload-icon">📦</div>
+                <div class="upload-text">Drop your openshift-data.json here</div>
+                <div class="upload-subtext">or click to browse</div>
+                <input type="file" id="clusterDataFile" accept=".json,.yaml,.yml" />
+            </div>
+
+            <div class="file-name-display" id="fileNameDisplay">
+                ✓ File loaded: <span id="fileName"></span>
+            </div>
+
+            <label style="display: block; font-weight: 700; margin-top: 30px; font-size: 16px; color: #2d3748;">🎯 Target OpenShift Version</label>
+            <select id="targetVersion">
+                <option value="" selected>-- Select Target OpenShift Version --</option>
+                <option value="4.12">OpenShift 4.12</option>
+                <option value="4.13">OpenShift 4.13</option>
+                <option value="4.14">OpenShift 4.14</option>
+                <option value="4.15">OpenShift 4.15</option>
+                <option value="4.16">OpenShift 4.16</option>
+                <option value="4.17">OpenShift 4.17</option>
+                <option value="4.18">OpenShift 4.18</option>
+                <option value="4.19">OpenShift 4.19</option>
+                <option value="4.20">OpenShift 4.20</option>
+                <option value="4.21">OpenShift 4.21</option>
+                <option value="4.22">OpenShift 4.22 (Latest)</option>
+            </select>
+
+            <button id="analyzeBtn" onclick="analyzeCluster()" disabled>
+                🔍 Analyze Compatibility
+            </button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>⚡ Analyzing your operators...</p>
+        </div>
+
+        <div class="results" id="results">
+            <div class="card">
+                <h2>
+                    <span class="section-icon">📊</span>
+                    Analysis Results
+                </h2>
+
+                <div class="alert alert-success">
+                    <strong>✅ Analysis Complete!</strong>
+                </div>
+
+                <div class="summary-grid">
+                    <div class="summary-card summary-total">
+                        <h3 id="totalOperators">0</h3>
+                        <p>Total Operators</p>
+                    </div>
+                    <div class="summary-card summary-compatible">
+                        <h3 id="compatibleCount">0</h3>
+                        <p>✓ Compatible</p>
+                    </div>
+                    <div class="summary-card summary-upgrade">
+                        <h3 id="upgradeCount">0</h3>
+                        <p>⚠ Upgrade Required</p>
+                    </div>
+                    <div class="summary-card summary-unsupported">
+                        <h3 id="incompatibleCount">0</h3>
+                        <p>✗ Incompatible</p>
+                    </div>
+                </div>
+
+                <div class="ai-summary-box">
+                    <strong>🤖 AI-Powered Summary</strong>
+                    <p id="aiSummary"></p>
+                </div>
+
+                <h3 style="margin-top: 40px; font-size: 24px; font-weight: 700; color: #2d3748;">
+                    📋 Detailed Operator Analysis
+                </h3>
+                <div id="operatorCardsContainer" style="display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px;">
+                    <!-- Operator cards will be inserted here -->
+                </div>
+
+                <button onclick="location.reload()" style="margin-top: 40px; background: linear-gradient(135deg, #667eea, #764ba2);">
+                    🔄 Run New Analysis
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let clusterData = null;
+
+        // Drag and drop functionality
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('clusterDataFile');
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        async function handleFile(file) {
+            try {
+                const text = await file.readAsText();
+                clusterData = JSON.parse(text);
+
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileNameDisplay').style.display = 'block';
+                document.getElementById('analyzeBtn').disabled = false;
+
+                uploadZone.style.borderColor = '#38ef7d';
+                uploadZone.style.background = 'linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%)';
+            } catch (error) {
+                alert('❌ Error reading file: ' + error.message);
+            }
+        }
+
+        // Removed populateOperatorDropdown() and updateOperatorVersions() - feature removed
+
+        // Fix for file reading
+        File.prototype.readAsText = function() {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsText(this);
+            });
+        };
+
+        function copyCommand() {
+            const command = document.getElementById('singleCommand').textContent;
+            navigator.clipboard.writeText(command).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy';
+                }, 2000);
+            });
+        }
+
+        async function analyzeCluster() {
+            if (!clusterData) {
+                alert('⚠️ Please upload the cluster data file first');
+                return;
+            }
+
+            document.getElementById('uploadCard').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
+            try {
+                const requestBody = {
+                    cluster_data: clusterData,
+                    target_ocp_version: document.getElementById('targetVersion').value
+                };
+
+                const response = await fetch(`${API_URL}/api/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const result = await response.json();
+                document.getElementById('loading').style.display = 'none';
+                displayResults(result);
+
+            } catch (error) {
+                alert('❌ Analysis failed: ' + error.message);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('uploadCard').style.display = 'block';
+            }
+        }
+
+        function displayResults(result) {
+            document.getElementById('totalOperators').textContent = result.cluster_info.total_operators;
+            document.getElementById('compatibleCount').textContent = result.cluster_info.compatible_count;
+            document.getElementById('upgradeCount').textContent = result.cluster_info.upgrade_required_count;
+            document.getElementById('incompatibleCount').textContent = result.cluster_info.unsupported_count;
+
+            // Risk badge removed from UI
+            // const riskBadge = document.getElementById('riskBadge');
+            // riskBadge.textContent = `${result.risk_score.toUpperCase()} RISK`;
+            // riskBadge.className = `risk-badge risk-${result.risk_score}`;
+
+            document.getElementById('aiSummary').textContent = result.ai_summary;
+
+            const container = document.getElementById('operatorCardsContainer');
+            container.innerHTML = '';
+
+            result.compatibility_results.forEach(op => {
+                // Format status display
+                let statusDisplay = op.status.replace(/_/g, ' ').toUpperCase();
+                if (op.status === 'incompatible_upgrade_required') {
+                    statusDisplay = 'INCOMPATIBLE & UPGRADE REQUIRED';
+                } else if (op.status === 'not_redhat_operator') {
+                    statusDisplay = 'NON-RED HAT OPERATOR';
+                }
+
+                // Get compatible version (use recommended_version or target_version)
+                let compatibleVersion = op.recommended_version || op.target_version || 'N/A';
+
+                const card = document.createElement('div');
+                card.className = 'operator-card';
+
+                // Build details grid - hide Target OCP and Compatible Version when target operator version is specified
+                const showTargetOperator = op.target_operator_version !== undefined;
+
+                // Format available versions
+                let availableVersions = 'N/A';
+                if (op.supported_versions && op.supported_versions.length > 0) {
+                    if (op.supported_versions.length <= 5) {
+                        availableVersions = op.supported_versions.join(', ');
+                    } else {
+                        availableVersions = op.supported_versions.slice(0, 5).join(', ') + ` ... (${op.supported_versions.length} total)`;
+                    }
+                } else if (op.status === 'incompatible' || op.status === 'unknown') {
+                    availableVersions = '<span style="color: #e53e3e;">(not in catalog)</span>';
+                }
+
+                let detailsGrid = `
+                    <div class="operator-details-grid">
+                        <div class="detail-item">
+                            <label>Current Version</label>
+                            <div class="value">${op.current_version}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label>Channel</label>
+                            <div class="value">${op.channel || 'N/A'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label>Max Supported OCP</label>
+                            <div class="value">${op.max_supported_ocp || 'N/A'}</div>
+                        </div>`;
+
+                if (!showTargetOperator) {
+                    detailsGrid += `
+                        <div class="detail-item">
+                            <label>Target OCP</label>
+                            <div class="value">${result.cluster_info.target_version}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label>Recommended Version</label>
+                            <div class="value">${compatibleVersion}</div>
+                        </div>
+                        <div class="detail-item">
+                            <label>Available in ${op.target_ocp || result.cluster_info.target_version}</label>
+                            <div class="value">${availableVersions}</div>
+                        </div>`;
+                }
+
+                detailsGrid += `</div>`;
+
+                card.innerHTML = `
+                    <div class="operator-card-header">
+                        <div class="operator-name-section">
+                            <h4>${op.operator_name}</h4>
+                        </div>
+                        <span class="status status-${op.status.replace(/_/g, '')}">${statusDisplay}</span>
+                    </div>
+
+                    ${detailsGrid}
+
+                    <div style="margin-top: 20px; padding: 20px; background: #f7fafc; border-radius: 10px; border-left: 3px solid #4299e1;">
+                        <strong style="color: #2c5282; font-size: 14px; display: block; margin-bottom: 10px;">💡 Recommendation</strong>
+                        <p style="color: #2d3748; font-size: 15px; line-height: 1.6; margin: 0;">${op.explanation}</p>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            document.getElementById('results').style.display = 'block';
+        }
+
+        window.onload = async () => {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                if (response.ok) {
+                    console.log('✅ Backend is running on ' + API_URL);
+                }
+            } catch (error) {
+                alert('⚠️ Backend server is not running!\n\nPlease start: cd backend && python3 simple_server.py');
+            }
+        };
+    </script>
+</body>
+</html>
