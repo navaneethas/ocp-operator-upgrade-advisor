@@ -105,13 +105,13 @@ geminicli check operator compatibility for OCP 4.20
 
 Have suggestions, found a bug, or want to share how you're using this tool? 
 
-**Submit feedback:** [Open an issue on GitHub](https://github.com/navaneethas/ocp-operator-upgrade-advisor/issues/new)
+**Submit feedback:** [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdPpmM164p9J7kSkFB9ph7V5dBgw4McyhwCjPwMJGCLYKYH9g/viewform?usp=publish-editor)
 
-Let us know:
+Share:
 - 🐛 Bug reports
 - 💡 Feature requests
-- 📝 Improvement suggestions
+- ❓ Questions
 - 🎉 Success stories
-- 📋 Missing operators or OCP versions
+- 📝 General suggestions
 
-Your feedback helps make this tool better for everyone!
+**Your responses are private** - Only visible to the maintainer. Anonymous submissions welcome!
