@@ -10,13 +10,13 @@ Give it a spin and let me know what you think! (created by Claude) 🤖
 
 ## 🎯 What It Does
 
-Before upgrading your OpenShift cluster, this tool tells you:
+Before upgrading your OpenShift cluster, this skill tells you:
 
 - ✅ Which operators are compatible with the target OCP version
-- ⚠️ Which operators need upgrades
-- ❌ Which operators won't work
+- ⚠️ Which operators need upgrades to remain supported
 - 📊 Recommended versions for each operator
 - 🎯 Maximum OCP version each operator supports
+- 🔍 Compatibility status: Compatible, Incompatible, or Upgrade Required
 
 **Coverage:** 180 Red Hat operators across OCP 4.12 → 4.22
 
