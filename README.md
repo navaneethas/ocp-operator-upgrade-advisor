@@ -36,6 +36,9 @@ curl -o compatibility_matrix.json \
 ```
 
 **2. Use with geminicli:**
+
+**⚠️ Important:** Run the `gemini` command from the same directory where you downloaded the skill and matrix files.
+
 ```bash
 gemini check operators compatibility for OCP <OCP_version> /path/to/must-gather
 ```
