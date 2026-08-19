@@ -18,7 +18,7 @@ Before upgrading your OpenShift cluster, this skill tells you:
 - 🎯 Maximum OCP version each operator supports
 - 🔍 Compatibility status: Compatible, Incompatible, or Upgrade Required
 
-**Coverage:** 180 Red Hat operators across OCP 4.12 → 4.22
+**Coverage:** Red Hat operators across OCP 4.12 → 4.22
 
 ---
 
