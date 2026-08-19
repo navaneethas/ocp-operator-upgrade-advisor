@@ -2,7 +2,7 @@
 
 **Check operator compatibility before upgrading OpenShift clusters**
 
-I built this tool to help us (and customers) check if their operators are compatible with target OpenShift versions. I noticed many struggle with manual version checking, so this should make it much easier.
+I built this skill to help us (and customers) check if their operators are compatible with target OpenShift versions. I noticed many struggle with manual version checking, so this should make it much easier.
 
 Give it a spin and let me know what you think! (created by Claude) 🤖
 
